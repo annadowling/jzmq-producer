@@ -43,9 +43,13 @@ public class JZMQPublisher {
                 publisher.setIdentity("B".getBytes());
                 // for testing setting sleep at 100ms to ensure started.
                 Thread.sleep(100l);
-                for (int i = 0; i <= message.messageVolume; i++) {
+                Integer messageVolume = message.messageVolume;
+
+                for (int i = 0; i <= messageVolume; i++) {
                     publisher.sendMore("B");
-                    boolean isSent = publisher.send("X(" + System.currentTimeMillis() + "):" + i + generateMessage());
+
+                    String messageText = message.generateMessage();
+                    boolean isSent = publisher.send("( " + message.messageType + System.currentTimeMillis() + "):" + i + messageText);
                     System.out.println("JZMQ Message was sent " + i + " , " + isSent);
                 }
                 publisher.close();
@@ -55,11 +59,5 @@ public class JZMQPublisher {
 
             }
         }
-    }
-
-    public String generateMessage() {
-        char[] chars = new char[message.messageSizeBytes];
-        Arrays.fill(chars, 'T');
-        return new String(chars);
     }
 }
