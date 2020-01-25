@@ -25,7 +25,7 @@ public class Message {
 
     /**
      * Generate Message with Configurable Byte Size for send
-     * @return
+     * @return String
      */
     public String generateMessage() {
         char[] chars = new char[messageSizeBytes];

@@ -21,9 +21,6 @@ public class JZMQPublisher {
     @Value("${zeromq.address}")
     private String bindAddress;
 
-    @Value("${message.volume}")
-    private int messageVolume;
-
     @Value("${jzmq.enabled}")
     private boolean jzmqEnabled;
 
