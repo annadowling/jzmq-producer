@@ -1,6 +1,6 @@
 package com.msc.spring.producer.jzmq;
 
-import com.msc.spring.producer.message.Message;
+import com.msc.spring.producer.message.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.zeromq.ZMQ;
 
-import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Created by annadowling on 2020-01-16.
@@ -27,7 +27,7 @@ public class JZMQPublisher {
     final String errorMessage = "Exception encountered = ";
 
     @Autowired
-    private Message message;
+    private MessageUtils messageUtils;
 
     @Bean
     public void setUpJZMQProducerAndSendMessage() {
@@ -40,13 +40,15 @@ public class JZMQPublisher {
                 publisher.setIdentity("B".getBytes());
                 // for testing setting sleep at 100ms to ensure started.
                 Thread.sleep(100l);
-                Integer messageVolume = message.messageVolume;
+                Integer messageVolume = messageUtils.messageVolume;
 
                 for (int i = 0; i <= messageVolume; i++) {
                     publisher.sendMore("B");
 
-                    String messageText = message.generateMessage();
-                    boolean isSent = publisher.send("( " + message.messageType + System.currentTimeMillis() + "):" + i + messageText);
+                    String messageText = messageUtils.generateMessage();
+                    Map<String, String> messageMap = messageUtils.formatMessage(messageText, "JZMQ");
+
+                    boolean isSent = publisher.send("( " + messageUtils.messageType + System.currentTimeMillis() + "):" + i + messageMap);
                     System.out.println("JZMQ Message was sent " + i + " , " + isSent);
                 }
                 publisher.close();
