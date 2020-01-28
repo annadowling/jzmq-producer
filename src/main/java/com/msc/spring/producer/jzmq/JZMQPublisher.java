@@ -47,6 +47,7 @@ public class JZMQPublisher {
 
                     String messageText = messageUtils.generateMessage();
                     Map<String, String> messageMap = messageUtils.formatMessage(messageText, "JZMQ");
+                    messageUtils.saveMessage(messageMap);
 
                     boolean isSent = publisher.send("( " + messageUtils.messageType + System.currentTimeMillis() + "):" + i + messageMap);
                     System.out.println("JZMQ Message was sent " + i + " , " + isSent);

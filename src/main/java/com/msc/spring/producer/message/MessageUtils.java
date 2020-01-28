@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,19 @@ public class MessageUtils {
         messageMap.put("message", messageText);
 
         return messageMap;
+    }
+
+    /**
+     * Save a message entry to the db for each sent message
+     * @param messageMap
+     */
+    public void saveMessage(Map<String, String> messageMap){
+        Message message = new Message();
+        message.setCorrelationId(messageMap.get("correlationId"));
+        message.setRequestType(messageMap.get("messageId"));
+        message.setMessageVolume(messageVolume);
+        message.setMessageSize(messageSizeBytes);
+        message.setSendTime(new Date(System.currentTimeMillis()));
     }
 
     /**
