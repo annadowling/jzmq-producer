@@ -55,6 +55,8 @@ public class MessageUtils {
         messageMap.put("correlationId", correlationId);
         messageMap.put("messageId", messageId);
         messageMap.put("message", messageText);
+        messageMap.put("messageVolume", messageVolume.toString());
+        messageMap.put("messageSize", messageSizeBytes.toString());
 
         return messageMap;
     }
