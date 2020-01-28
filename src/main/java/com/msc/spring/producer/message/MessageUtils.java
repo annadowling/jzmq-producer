@@ -1,5 +1,6 @@
 package com.msc.spring.producer.message;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +28,9 @@ public class MessageUtils {
 
     @Value("#{new Integer('${message.size.bytes}')}")
     public Integer messageSizeBytes;
+
+    @Autowired
+    MessageRepository repository;
 
     /**
      * Generate Message with Configurable Byte Size for send
@@ -66,6 +70,8 @@ public class MessageUtils {
         message.setMessageVolume(messageVolume);
         message.setMessageSize(messageSizeBytes);
         message.setSendTime(new Date(System.currentTimeMillis()));
+
+        repository.save(message);
     }
 
     /**
