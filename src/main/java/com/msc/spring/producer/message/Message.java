@@ -1,7 +1,7 @@
 package com.msc.spring.producer.message;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "message")
@@ -62,11 +62,11 @@ public class Message {
         this.correlationId = correlationId;
     }
 
-    public Date getSendTime() {
+    public java.util.Date getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(java.util.Date sendTime) {
         this.sendTime = sendTime;
     }
 
