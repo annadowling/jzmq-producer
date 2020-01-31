@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.zeromq.ZMQ;
+import org.zeromq.ZMsg;
 
 import java.util.Map;
 
@@ -49,8 +50,11 @@ public class JZMQPublisher {
                     Map<String, String> messageMap = messageUtils.formatMessage(messageText, "JZMQ");
                     messageUtils.saveMessage(messageMap);
 
-                    boolean isSent = publisher.send("( " + messageUtils.messageType + System.currentTimeMillis() + "):" + i + messageMap);
-                    System.out.println("JZMQ Message was sent " + i + " , " + isSent);
+                    byte[] mapBytes = messageUtils.convertMapToBytes(messageMap);
+                    ZMsg req = new ZMsg();
+                    req.add(mapBytes);
+                    System.out.println("Sending JZMQ Message " + i);
+                    req.send(publisher);
                 }
                 publisher.close();
                 context.term();
