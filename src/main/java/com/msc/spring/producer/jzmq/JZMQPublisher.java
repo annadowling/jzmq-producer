@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMsg;
@@ -24,6 +25,9 @@ public class JZMQPublisher {
 
     @Value("${jzmq.enabled}")
     private boolean jzmqEnabled;
+
+    @Value("${multi.thread.enabled}")
+    private boolean multiThreaded;
 
     final String errorMessage = "Exception encountered = ";
 
@@ -54,7 +58,11 @@ public class JZMQPublisher {
                     ZMsg req = new ZMsg();
                     req.add(mapBytes);
                     System.out.println("Sending JZMQ Message " + i);
-                    req.send(publisher);
+                    if (multiThreaded) {
+                        sendMessageMultiThread(req, publisher);
+                    } else {
+                        req.send(publisher);
+                    }
                 }
                 publisher.close();
                 context.term();
@@ -63,5 +71,10 @@ public class JZMQPublisher {
 
             }
         }
+    }
+
+    @Async
+    void sendMessageMultiThread(ZMsg req, ZMQ.Socket publisher) throws Exception {
+        req.send(publisher);
     }
 }
