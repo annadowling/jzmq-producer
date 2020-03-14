@@ -52,7 +52,7 @@ public class JZMQPublisher {
 
                     String messageText = messageUtils.generateMessage();
                     Map<String, String> messageMap = messageUtils.formatMessage(messageText, "JZMQ");
-                    messageUtils.saveMessage(messageMap);
+                    messageUtils.saveMessage(messageMap, multiThreaded);
 
                     byte[] mapBytes = messageUtils.convertMapToBytes(messageMap);
                     ZMsg req = new ZMsg();

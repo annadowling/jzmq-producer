@@ -19,6 +19,8 @@ public class Message {
     private int messageVolume;
     private int messageSize;
 
+    private boolean isMultiThreaded;
+
     public Message() {
     }
 
@@ -70,6 +72,14 @@ public class Message {
         this.sendTime = sendTime;
     }
 
+    public boolean isMultiThreaded() {
+        return isMultiThreaded;
+    }
+
+    public void setMultiThreaded(boolean multiThreaded) {
+        isMultiThreaded = multiThreaded;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -79,6 +89,7 @@ public class Message {
                 ", sendTime=" + sendTime +
                 ", messageVolume=" + messageVolume +
                 ", messageSize=" + messageSize +
+                ", isMultiThreaded=" + isMultiThreaded +
                 '}';
     }
 }

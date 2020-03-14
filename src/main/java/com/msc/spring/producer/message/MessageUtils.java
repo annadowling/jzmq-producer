@@ -61,13 +61,14 @@ public class MessageUtils {
      * Save a message entry to the db for each sent message
      * @param messageMap
      */
-    public void saveMessage(Map<String, String> messageMap){
+    public void saveMessage(Map<String, String> messageMap, boolean isMultiThreaded){
         Message message = new Message();
         message.setCorrelationId(messageMap.get("correlationId"));
         message.setRequestType(messageMap.get("messageId"));
         message.setMessageVolume(messageVolume);
         message.setMessageSize(messageSizeBytes);
         message.setSendTime(new Date());
+        message.setMultiThreaded(isMultiThreaded);
 
         repository.save(message);
     }
