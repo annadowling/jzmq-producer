@@ -47,7 +47,7 @@ public class JZMQPublisher {
                 Thread.sleep(100l);
                 Integer messageVolume = messageUtils.messageVolume;
 
-                for (int i = 0; i <= messageVolume; i++) {
+                for (int i = 1; i <= messageVolume; i++) {
                     publisher.sendMore("B");
 
                     String messageText = messageUtils.generateMessage();
