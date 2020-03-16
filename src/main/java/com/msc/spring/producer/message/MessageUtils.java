@@ -1,5 +1,8 @@
 package com.msc.spring.producer.message;
 
+import com.msc.spring.producer.jzmq.JZMQPublisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +18,8 @@ import java.util.*;
 
 @Configuration
 public class MessageUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageUtils.class);
 
     @Value("${message.notificationType}")
     public String messageType;
@@ -87,12 +92,12 @@ public class MessageUtils {
             out.writeObject(messageMap);
             out.flush();
         }catch(IOException ex){
-            System.out.println("IOException = " + ex);
+            LOGGER.info("IOException = " + ex);
         } finally {
             try {
                 byteOut.close();
             } catch (IOException ex) {
-                System.out.println("IOException = " + ex);
+                LOGGER.info("IOException = " + ex);
             }
         }
         return byteOut.toByteArray();

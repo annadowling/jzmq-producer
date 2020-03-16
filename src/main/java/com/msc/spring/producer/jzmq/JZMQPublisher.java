@@ -1,6 +1,8 @@
 package com.msc.spring.producer.jzmq;
 
 import com.msc.spring.producer.message.MessageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +21,8 @@ import java.util.Map;
 @Component
 @ConditionalOnProperty(prefix = "jzmq", name = "enabled", havingValue = "true")
 public class JZMQPublisher {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JZMQPublisher.class);
 
     @Value("${zeromq.address}")
     private String bindAddress;
@@ -41,7 +45,7 @@ public class JZMQPublisher {
                  ZMQ.Socket publisher = context.socket(ZMQ.PUB);
             ) {
                 publisher.bind(bindAddress);
-                System.out.println("Starting Publisher..");
+                LOGGER.info("Starting Publisher..");
                 publisher.setIdentity("B".getBytes());
                 // for testing setting sleep at 100ms to ensure started.
                 Thread.sleep(100l);
@@ -57,17 +61,18 @@ public class JZMQPublisher {
                     byte[] mapBytes = messageUtils.convertMapToBytes(messageMap);
                     ZMsg req = new ZMsg();
                     req.add(mapBytes);
-                    System.out.println("Sending JZMQ Message " + i);
+                    LOGGER.info("Sending JZMQ Message " + i);
                     if (multiThreaded) {
                         sendMessageMultiThread(req, publisher);
                     } else {
                         req.send(publisher);
                     }
                 }
+                LOGGER.info("Completed sending all JZMQ Messages ");
                 publisher.close();
                 context.term();
             } catch (Exception e) {
-                System.out.println(errorMessage + e.getLocalizedMessage());
+                LOGGER.info(errorMessage + e.getLocalizedMessage());
 
             }
         }
